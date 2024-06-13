@@ -82,6 +82,67 @@ export const PokemonScreen = ({navigation, route}: Props) => {
         )}
       />
 
+      {/* Games */}
+      <Text style={styles.subTitle}>Games</Text>
+      <FlatList
+        data={pokemon.games}
+        keyExtractor={item => item}
+        centerContent
+        renderItem={({item}) => (
+          <Chip selectedColor="white">{Formatter.capitalize(item)}</Chip>
+        )}
+        horizontal
+        showsHorizontalScrollIndicator={false}
+      />
+
+      {/* Stats */}
+      <Text style={styles.subTitle}>Stats</Text>
+      <FlatList
+        data={pokemon.stats}
+        keyExtractor={(item, index) => `${item.name}-${index}`}
+        centerContent
+        renderItem={({item}) => (
+          <View style={styles.statsContainer}>
+            <Text style={{flex: 1, color: 'white'}}>
+              {Formatter.capitalize(item.name)}
+            </Text>
+            <Text style={{color: 'white'}}>{item.value}</Text>
+          </View>
+        )}
+        horizontal
+        showsHorizontalScrollIndicator={false}
+      />
+
+      {/* Abilities */}
+      <Text style={styles.subTitle}>Abilities</Text>
+      <FlatList
+        data={pokemon.abilities}
+        keyExtractor={item => item}
+        centerContent
+        renderItem={({item}) => (
+          <Chip selectedColor="white">{Formatter.capitalize(item)}</Chip>
+        )}
+        horizontal
+        showsHorizontalScrollIndicator={false}
+      />
+
+      {/* Moves */}
+      <Text style={styles.subTitle}>Moves</Text>
+      <FlatList
+        data={pokemon.moves}
+        keyExtractor={(item, index) => `${item.name}-${index}`}
+        centerContent
+        renderItem={({item}) => (
+          <View style={styles.statsContainer}>
+            <Text style={{flex: 1, color: 'white'}}>
+              {Formatter.capitalize(item.name)}
+            </Text>
+            <Text style={{color: 'white'}}>{item.level}</Text>
+          </View>
+        )}
+        horizontal
+        showsHorizontalScrollIndicator={false}
+      />
       <View style={{height: 100}} />
     </ScrollView>
   );

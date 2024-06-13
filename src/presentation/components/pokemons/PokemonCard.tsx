@@ -4,6 +4,7 @@ import {Card, Text} from 'react-native-paper';
 import {FadeInImage} from '../ui/FadeInImage';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {RootStackParams} from '../../navigator/StackNavigator';
+import {Formatter} from '../../../config/helpers/formatter';
 
 interface Props {
   pokemon: Pokemon;
@@ -20,7 +21,7 @@ export const PokemonCard = ({pokemon}: Props) => {
       }>
       <Card style={[styles.cardContainer, {backgroundColor: pokemon.color}]}>
         <Text style={styles.name} variant="bodyLarge" lineBreakMode="middle">
-          {pokemon.name}
+          {Formatter.capitalize(pokemon.name)}
           {'\n#' + pokemon.id}
         </Text>
         {/* Pokeball Background Image */}
@@ -33,7 +34,9 @@ export const PokemonCard = ({pokemon}: Props) => {
         {/* Pokemon Image */}
         <FadeInImage uri={pokemon.avatar} style={styles.pokemonImage} />
         {/* Types */}
-        <Text style={[styles.name, {marginTop: 35}]}>{pokemon.types[0]}</Text>
+        <Text style={[styles.name, {marginTop: 35}]}>
+          {Formatter.capitalize(pokemon.types[0])}
+        </Text>
       </Card>
     </Pressable>
   );
