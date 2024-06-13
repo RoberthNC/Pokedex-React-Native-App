@@ -1,4 +1,4 @@
-import {useQuery} from '@tanstack/react-query';
+import {useInfiniteQuery, useQuery} from '@tanstack/react-query';
 import {FlatList, StyleSheet, View} from 'react-native';
 import {getPokemons} from '../../../actions/pokemons';
 import {PokeballBg} from '../../components/ui/PokeballBg';
@@ -9,9 +9,18 @@ import {PokemonCard} from '../../components/pokemons/PokemonCard';
 
 export const HomeScreen = () => {
   const {top} = useSafeAreaInsets();
-  const {isLoading, data: pokemons = []} = useQuery({
-    queryKey: ['pokemons'],
-    queryFn: () => getPokemons(0),
+  // Traditional request
+  // const {isLoading, data: pokemons = []} = useQuery({
+  //   queryKey: ['pokemons'],
+  //   queryFn: () => getPokemons(0),
+  //   staleTime: 1000 * 60 * 60,
+  // });
+
+  const {isLoading, data, fetchNextPage} = useInfiniteQuery({
+    queryKey: ['pokemons', 'infinite'],
+    initialPageParam: 0,
+    queryFn: params => getPokemons(params.pageParam),
+    getNextPageParam: (lastPage, pages) => pages.length,
     staleTime: 1000 * 60 * 60,
   });
 
@@ -22,9 +31,14 @@ export const HomeScreen = () => {
         style={{paddingTop: top + 20}}
         numColumns={2}
         ListHeaderComponent={() => <Text variant="displayMedium">Pokedex</Text>}
-        data={pokemons}
-        keyExtractor={item => item.id.toString()}
+        data={data?.pages.flat() ?? []}
+        keyExtractor={(item, index) =>
+          item.id.toString().concat((index + 1).toString())
+        }
         renderItem={({item}) => <PokemonCard pokemon={item} />}
+        onEndReachedThreshold={0.6}
+        onEndReached={() => fetchNextPage()}
+        showsVerticalScrollIndicator={false}
       />
     </View>
   );
